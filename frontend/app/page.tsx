@@ -1,8 +1,19 @@
+import Header from "./_components/Header";
+
 export default function Home() {
   return (
     <div>
-      <h2>Welcome to Tee Studio 👕</h2>
-      <p>Start designing your own T-shirt now!</p>
+      {/* Header */}
+      <Header />
+      
+      {/* Hero */}
+
+      {/* Category List */}
+
+      {/* Product List */}
+
+      {/* Footer */}
+
     </div>
   );
 }
