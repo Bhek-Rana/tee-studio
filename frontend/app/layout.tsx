@@ -1,5 +1,8 @@
 import './globals.css';
 import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Tee Studio',
@@ -13,14 +16,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <header style={{ padding: '1rem', background: '#333', color: '#fff' }}>
-          <h1>Tee Studio</h1>
-        </header>
-        <main style={{ padding: '2rem' }}>{children}</main>
-        <footer style={{ padding: '1rem', background: '#f1f1f1', textAlign: 'center' }}>
-          © {new Date().getFullYear()} Tee Studio
-        </footer>
+      <body className={inter.className}>
+        <div className="px-10 md:px-20 lg:px-36">
+          {children}
+        </div>
       </body>
     </html>
   );

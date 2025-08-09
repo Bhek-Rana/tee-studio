@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "userslists",
+  "info": {
+    "singularName": "userslist",
+    "pluralName": "userslists",
+    "displayName": "Userslist"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "fullname": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "required": true
+    },
+    "picture": {
+      "type": "string"
+    }
+  }
+}
