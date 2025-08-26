@@ -1,8 +1,8 @@
+
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-
-const inter = Inter({ subsets: ['latin'] });
+import Provider from './provider';
 
 export const metadata: Metadata = {
   title: 'Tee Studio',
@@ -11,16 +11,25 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly <{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <div className="px-10 md:px-20 lg:px-36">
-          {children}
+      <body
+       className={'${geistSans.variable} ${geistMono.variable'}
+       >
+         <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID!}>
+        <div className='px-10 md:px-20 lg:px-36 '>
+          <Provider>
+             {children}
+
+          </Provider>
+          
         </div>
+        </GoogleOAuthProvider>
       </body>
     </html>
   );
 }
+
