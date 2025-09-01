@@ -4,10 +4,10 @@ export interface SizeTShirtSize extends Struct.ComponentSchema {
   collectionName: 'components_size_t_shirt_sizes';
   info: {
     displayName: 't-shirt-size';
-    icon: 'collapse';
+    icon: 'cursor';
   };
   attributes: {
-    Size: Schema.Attribute.Enumeration<['S,', 'M,', 'L,', 'XL,']>;
+    Size: Schema.Attribute.Enumeration<['S,', 'M,', 'L,', 'XL']>;
   };
 }
 

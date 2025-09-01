@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * userlist controller
+ * user-list controller
  */
 
 const { createCoreController } = require('@strapi/strapi').factories;
 
-module.exports = createCoreController('api::userlist.userlist');
+module.exports = createCoreController('api::user-list.user-list');

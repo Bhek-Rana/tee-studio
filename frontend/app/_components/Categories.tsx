@@ -7,14 +7,16 @@ import Link from 'next/link'
 type Category = {
   name: string,
   documentId: string
+  slug: string
 }
 
 const imageMap: Record<string, string> = {
-  'shirt': '/shirt.png',
-  't-shirts': '/t-shirts.png',
+  'shirt': '/shirt.jpg',
+  't-shirts': '/t-shirts.jpg',
   'my-tshirt': '/my-tshirt.jpg',
   'jacket': '/jacket.jpg',
-  'pant': '/pant.png',
+  'pant': '/pant.jpg',
+  
 }
 
 function Categories() {
@@ -36,7 +38,7 @@ function Categories() {
       <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 mt-5'>
         {categoryList.map((category, index) => (
           <Link
-            href={'#'}
+            href={'/category/' + category?.slug}
             key={index}
             className='p-4 border rounded-lg flex flex-col items-center hover:border-primary cursor-pointer'
           >

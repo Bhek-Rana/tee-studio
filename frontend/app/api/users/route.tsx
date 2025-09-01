@@ -14,7 +14,7 @@ export async function POST(req:NextRequest){
 
     }
     //Check if user already exists
-    const result = await axiosClient.post('/userlists',data);
+    const result = await axiosClient.post('/user-lists',data);
 
     console.log(result);
     return NextResponse.json(result.data);

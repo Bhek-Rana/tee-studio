@@ -395,7 +395,7 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     name: Schema.Attribute.String;
-    products: Schema.Attribute.Relation<'manyToMany', 'api::product.product'>;
+    products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'name'>;
     updatedAt: Schema.Attribute.DateTime;
@@ -415,10 +415,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    categories: Schema.Attribute.Relation<
-      'manyToMany',
-      'api::category.category'
-    >;
+    category: Schema.Attribute.Relation<'manyToOne', 'api::category.category'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -445,12 +442,12 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiUserlistUserlist extends Struct.CollectionTypeSchema {
-  collectionName: 'userlists';
+export interface ApiUserListUserList extends Struct.CollectionTypeSchema {
+  collectionName: 'user_lists';
   info: {
-    displayName: 'Userlist';
-    pluralName: 'userlists';
-    singularName: 'userlist';
+    displayName: 'UserList';
+    pluralName: 'user-lists';
+    singularName: 'user-list';
   };
   options: {
     draftAndPublish: true;
@@ -464,7 +461,7 @@ export interface ApiUserlistUserlist extends Struct.CollectionTypeSchema {
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
-      'api::userlist.userlist'
+      'api::user-list.user-list'
     > &
       Schema.Attribute.Private;
     picture: Schema.Attribute.String;
@@ -986,7 +983,7 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::category.category': ApiCategoryCategory;
       'api::product.product': ApiProductProduct;
-      'api::userlist.userlist': ApiUserlistUserlist;
+      'api::user-list.user-list': ApiUserListUserList;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

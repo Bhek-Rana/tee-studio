@@ -2,7 +2,7 @@
   "collectionName": "components_size_t_shirt_sizes",
   "info": {
     "displayName": "t-shirt-size",
-    "icon": "collapse"
+    "icon": "cursor"
   },
   "options": {},
   "attributes": {
@@ -12,7 +12,7 @@
         "S,",
         "M,",
         "L,",
-        "XL,"
+        "XL"
       ]
     }
   },

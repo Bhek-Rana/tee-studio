@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "userlists",
+  "collectionName": "user_lists",
   "info": {
-    "singularName": "userlist",
-    "pluralName": "userlists",
-    "displayName": "Userlist"
+    "singularName": "user-list",
+    "pluralName": "user-lists",
+    "displayName": "UserList"
   },
   "options": {
     "draftAndPublish": true

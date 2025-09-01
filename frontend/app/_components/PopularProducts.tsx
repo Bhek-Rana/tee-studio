@@ -31,11 +31,11 @@ function PopularProducts() {
       const response = await axios.get<Product[]>("/api/products?ispopular=1");
 
       const fallbackImages = [
-        "/t-shirts.png",
+        "/t-shirts.jpg",
         "/jacket.jpg",
         "/my-tshirt.jpg",
-        "/pant.png",
-        "/shirt.png",
+        "/pant.jpg",
+        "/shirt.jpg",
       ];
 
       // Add fallback images if missing

@@ -20,6 +20,7 @@
 "use client"
 import React, { useState } from 'react'
 import { UserDetailContext } from '@/context/UserDetailContext';
+import Header from './_components/Header';
 function Provider({
     children,
 }: Readonly <{
@@ -30,6 +31,8 @@ const [UserDetail, setUserDetail] = useState<any>(null);
   return(
     <div>
       <UserDetailContext.Provider value={{ UserDetail, setUserDetail }}>
+         {/* Header */}
+      <Header />
         {children}
       </UserDetailContext.Provider>
       
