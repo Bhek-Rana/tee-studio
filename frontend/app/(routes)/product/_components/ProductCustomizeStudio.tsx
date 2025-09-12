@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { Crop, ImageOff, ImageUpscale, Upload } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Canvas, FabricImage } from 'fabric'
+import { imagekit } from '@/lib/ImageKitInstance'
 
 type Props = {
   product?: Product
@@ -46,6 +47,34 @@ function ProductCustomizeStudio({ product }: Props) {
         canvasImageRef.scaleY= 0.1;
         canvasInstance.add(canvasImageRef);
         canvasInstance.renderAll();
+    }
+
+    const onHandleImageUpload= async (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file= event.target.files?.[0];
+      //Upload file
+      if (file){
+        const uploadImageRef = await imagekit.upload({
+          //@ts-ignore
+          file: file,
+          fileName: file?.name!,
+          isPublished: true,
+          useUniqueFileName: false,
+        });
+        
+        //Show on canvas
+        //@ts-ignore
+        const uploadedImageUrl= uploadImageRef?.url;
+        if (uploadedImageUrl)
+        {
+          canvasInstance.clear();
+          canvasInstance.renderAll();
+          const canvasImageRef= await FabricImage.fromURL(uploadedImageUrl);
+          canvasImageRef.scaleX= 0.1;
+          canvasImageRef.scaleY= 0.1;
+          canvasInstance.add(canvasImageRef);
+          canvasInstance.renderAll();
+          }
+      }
     }
 
       if (!product) return null;
@@ -100,10 +129,13 @@ function ProductCustomizeStudio({ product }: Props) {
 
 
       <div className='flex gap-5 my-5'>
-        <div className='flex flex-col p-5 items-center border rounded-lg hover:border-primary cursor-pointer  hover:bg-blue-50' >
-            <Upload />
-            <h2>Upload Image</h2>
-        </div>
+        <label htmlFor='uploadImage'>
+          <div className='flex flex-col p-5 items-center border rounded-lg hover:border-primary cursor-pointer  hover:bg-blue-50' >
+              <Upload />
+              <h2>Upload Image</h2>
+          </div>
+        </label>
+        <input type='file' id='uploadImage' className='hidden' onChange={onHandleImageUpload} />
         <div className='flex flex-col p-5 items-center border rounded-lg hover:border-primary cursor-pointer  hover:bg-blue-50' >
             <ImageOff />
             <h2>BG Remove</h2>
