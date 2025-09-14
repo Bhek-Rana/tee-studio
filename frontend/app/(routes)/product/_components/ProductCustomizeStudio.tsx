@@ -1,7 +1,7 @@
 import { Product } from '@/app/_components/PopularProducts'
 import React, { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import { Crop, ImageOff, ImageUpscale, Upload } from 'lucide-react'
+import { Crop, GalleryVerticalEnd, ImageOff, ImageUpscale, Upload } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Canvas, FabricImage } from 'fabric'
 import { imagekit } from '@/lib/ImageKitInstance'
@@ -10,10 +10,34 @@ type Props = {
   product?: Product
 }
 
+const DEFAULT_IMAGE = 'https://ik.imagekit.io/Tubeguruji/image.png?updatedAt=1752630045024';
+const AITransformOptions = [
+  {
+    name: 'Background remove',
+    icon: ImageOff,
+    imageKitTr:"e-bgremove"
+  },
+  {
+    name: 'Upscale',
+    icon: ImageUpscale,
+    imageKitTr:"e-upscale"
+  },
+  {
+    name: 'Smart crop',
+    icon: Crop,
+    imageKitTr:"fo-auto"
+  },
+  {
+    name: 'Shadow',
+    icon: GalleryVerticalEnd,
+    imageKitTr:"e-shadow"
+  }
+]
+
 function ProductCustomizeStudio({ product }: Props) {
     const canvasRef=useRef<any>(null);
     const [canvasInstance,setCanvasInstance]=useState<any>(null);
-
+    const [uploadedImage,setUploadedImage]=useState<string>(DEFAULT_IMAGE)
     useEffect(()=>{
          if(canvasRef.current)
          {
@@ -35,14 +59,15 @@ function ProductCustomizeStudio({ product }: Props) {
     },[])
 
     useEffect(()=> {
-        if(canvasInstance)
-        {
+        if(canvasInstance){
             AddDefaultImageToCanvas();
         }
-    },[canvasInstance])
+    },[canvasInstance,uploadedImage])
 
     const AddDefaultImageToCanvas= async () => {
-        const canvasImageRef= await FabricImage.fromURL('https://ik.imagekit.io/Tubeguruji/strapi-uploads/treva.png?updatedAt=1752616252141');
+        canvasInstance.clear();
+        canvasInstance.renderAll();
+        const canvasImageRef= await FabricImage.fromURL(uploadedImage);
         canvasImageRef.scaleX= 0.1;
         canvasImageRef.scaleY= 0.1;
         canvasInstance.add(canvasImageRef);
@@ -64,8 +89,10 @@ function ProductCustomizeStudio({ product }: Props) {
         //Show on canvas
         //@ts-ignore
         const uploadedImageUrl= uploadImageRef?.url;
+        console.log(uploadedImageUrl);
         if (uploadedImageUrl)
         {
+          setUploadedImage(uploadedImageUrl);
           canvasInstance.clear();
           canvasInstance.renderAll();
           const canvasImageRef= await FabricImage.fromURL(uploadedImageUrl);
@@ -105,8 +132,26 @@ function ProductCustomizeStudio({ product }: Props) {
     product?.productImage?.[1]?.url ||
     getFallbackImage(product?.title);
 
+    const OnApplyAITransformation=(transformation:any,add:boolean)=>{
 
+      if(add){
+        if(uploadedImage?.includes('&tr=')){
+          const newUrl= uploadedImage + transformation + ',';
+          setUploadedImage(newUrl);
+        } else{
+          const newUrl= uploadedImage +'&tr=' + transformation + ',';
+          setUploadedImage(newUrl);
+        }
+      } 
+      else {
+        const newUrl= uploadedImage.replace(transformation,'');
+        setUploadedImage(newUrl);
+      }
+    }
 
+    const isTransformationApplied= (transformation:string)=> {
+      return uploadedImage?.includes(transformation)?false:true;
+    }
 
   return (
     <div className='flex items-center flex-col '>
@@ -136,23 +181,24 @@ function ProductCustomizeStudio({ product }: Props) {
           </div>
         </label>
         <input type='file' id='uploadImage' className='hidden' onChange={onHandleImageUpload} />
-        <div className='flex flex-col p-5 items-center border rounded-lg hover:border-primary cursor-pointer  hover:bg-blue-50' >
-            <ImageOff />
-            <h2>BG Remove</h2>
-        </div>
-        <div className='flex flex-col p-5 items-center border rounded-lg hover:border-primary cursor-pointer  hover:bg-blue-50' >
-            <ImageUpscale />
-            <h2>Upscale</h2>
-        </div>
-        <div className='flex flex-col p-5 items-center border rounded-lg hover:border-primary cursor-pointer  hover:bg-blue-50' >
-            <Crop />
-            <h2>SmartCrop</h2>
-        </div>
-        
+
+          {AITransformOptions.map((item,index) => (
+          <div key={index} className={`flex flex-col p-5 items-center border
+           rounded-lg hover:border-primary
+           cursor-pointer  hover:bg-blue-50 
+           ${uploadedImage.includes(item.imageKitTr)?'border-primary' : null}
+           `} 
+           onClick={()=> OnApplyAITransformation(item?.imageKitTr,isTransformationApplied(item?.imageKitTr))}
+          >
+            <item.icon />
+            <h2 className='text-center'>{item.name}</h2>
+          </div>
+          ))}
         
       </div>
     </div>
   )
 }
 
-export default ProductCustomizeStudio
+export default ProductCustomizeStudio 
+
