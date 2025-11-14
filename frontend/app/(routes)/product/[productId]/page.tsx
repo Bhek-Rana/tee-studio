@@ -7,14 +7,19 @@ import axios from "axios";
 import { Divide, Palette } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ProductCustomizeStudio from "../_components/ProductCustomizeStudio";
+import { CartContext } from "@/context/CartContext";
+import { UserDetailContext } from "@/context/UserDetailContext";
 
 function ProductDetail() {
   const { productId } = useParams<{ productId: string }>();
   const [product, setProduct] = useState<Product | undefined>();
   const [loading, setLoading] = useState(true);
   const[enableCustomizeStudio,setEnableCustomizeStudio]=useState(false);
+  const {cart, setCart} = useContext(CartContext);
+  const {UserDetail, setUserDetail} = useContext(UserDetailContext);
+  const [designUrl, setDesignUrl]= useState<string>();
 
   useEffect(() => {
     const GetProductById = async () => {
@@ -57,6 +62,22 @@ function ProductDetail() {
     product?.productImage?.[1]?.url ||
     getFallbackImage(product?.title);
 
+  const AddToCart = async() => {
+    console.log(designUrl)
+    setCart((prev:any)=>[...prev,{
+      design: designUrl,
+      products: product,
+      userEmail: UserDetail?.email
+    }])
+    //Save to DB
+    const result = await axios.post('api/cart',{
+      product: product,
+      designUrl: designUrl,
+      userEmail: UserDetail?.email
+    });
+    console.log(result.data);
+  }
+
   return (
     <div>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-10 my-20">
@@ -73,7 +94,8 @@ function ProductDetail() {
             unoptimized
           />:
           
-          <ProductCustomizeStudio product={product} />
+          <ProductCustomizeStudio product={product} 
+          setDesignUrl={(url:string)=>setDesignUrl(url)}/>
         )}
       </div>
       {/* <div>
@@ -106,7 +128,7 @@ function ProductDetail() {
          </div>
 
          {!enableCustomizeStudio&& <Button size={'lg'} onClick={()=>setEnableCustomizeStudio(true)}><Palette />Customize</Button>}
-          <Button size={'lg'} variant={!enableCustomizeStudio?'outline' :'default'}><Palette />Add to Cart</Button>
+          <Button size={'lg'} onClick={()=>AddToCart()} variant={!enableCustomizeStudio?'outline' :'default'}><Palette />Add to Cart</Button>
         {/* Add more info here if needed */}
       </div>
        : <div className="space-y-3">
