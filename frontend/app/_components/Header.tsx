@@ -6,6 +6,7 @@ import { ShoppingCart } from "lucide-react";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { UserDetailContext } from "@/context/UserDetailContext";
+import { CartContext } from "@/context/CartContext";
 
 const menu = [
   { id: 1, name: "Home", path: "/" },
@@ -22,6 +23,7 @@ export type User = {
 
 function Header() {
   const [user, setUser] = useState<User>();
+  const {cart, setCart} = useContext(CartContext);
 
   // ✅ Guard against undefined context
   const context = useContext(UserDetailContext);
@@ -80,6 +82,16 @@ function Header() {
    console.log(result.data);
   }
 
+  useEffect(()=>{
+    user && getCartList();
+  },[user])
+
+  const getCartList=async()=>{
+    const result = await axios.get('api/cart?email='+user?.email);
+    console.log(result.data);
+    setCart(result);
+  }
+
   return (
     <div className="flex items-center justify-between p-4 px-10 ">
       <Image src={"/logo.svg"} alt="logo" width={180} height={180} />
@@ -91,7 +103,9 @@ function Header() {
         ))}
       </ul>
       <div className="flex gap-3 items-center">
-        <ShoppingCart />
+        <div className="flex gap-2 items-center">
+          <ShoppingCart /> <span className="p1 bg-gray-100 px-2 rounded">{cart?.length ?? 0}</span>
+        </div>
         {!user ? (
           <Button onClick={() => googleLogin()}>SignIn/SignUp</Button>
         ) : (

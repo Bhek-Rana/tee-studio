@@ -8,6 +8,7 @@ import { imagekit } from '@/lib/ImageKitInstance'
 
 type Props = {
   product?: Product
+  setDesignUrl: any
 }
 
 const DEFAULT_IMAGE = 'https://ik.imagekit.io/Tubeguruji/image.png?updatedAt=1752630045024';
@@ -34,7 +35,7 @@ const AITransformOptions = [
   }
 ]
 
-function ProductCustomizeStudio({ product }: Props) {
+function ProductCustomizeStudio({ product, setDesignUrl }: Props) {
     const canvasRef=useRef<any>(null);
     const [canvasInstance,setCanvasInstance]=useState<any>(null);
     const [uploadedImage,setUploadedImage]=useState<string>(DEFAULT_IMAGE)
@@ -61,6 +62,7 @@ function ProductCustomizeStudio({ product }: Props) {
     useEffect(()=> {
         if(canvasInstance){
             AddDefaultImageToCanvas();
+            setDesignUrl(uploadedImage);
         }
     },[canvasInstance,uploadedImage])
 
